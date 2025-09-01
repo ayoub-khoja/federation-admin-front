@@ -2,7 +2,7 @@
 export const API_CONFIG = {
   // URLs de base
   LOCAL_API_URL: 'http://localhost:8000/api',
-  PRODUCTION_API_URL: 'https://federation-admin-front.vercel.app/api',
+  PRODUCTION_API_URL: 'https://federation-backend.onrender.com/api',
   
   // URL actuelle basée sur l'environnement
   getCurrentAPIUrl: () => {
@@ -10,9 +10,9 @@ export const API_CONFIG = {
       return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
     }
     
-    if (process.env.NODE_ENV === 'production') {
-      return process.env.NEXT_PUBLIC_PRODUCTION_API_URL || 'https://federation-admin-front.vercel.app/api';
-    }
+         if (process.env.NODE_ENV === 'production') {
+       return process.env.NEXT_PUBLIC_PRODUCTION_API_URL || 'https://federation-backend.onrender.com/api';
+     }
     
     // Fallback basé sur l'hostname
     if (typeof window !== 'undefined') {
@@ -20,7 +20,7 @@ export const API_CONFIG = {
       if (hostname === 'localhost' || hostname === '127.0.0.1') {
         return 'http://localhost:8000/api';
       }
-      return 'https://federation-admin-front.vercel.app/api';
+             return 'https://federation-backend.onrender.com/api';
     }
     
     return 'http://localhost:8000/api';

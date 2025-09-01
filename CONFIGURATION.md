@@ -1,43 +1,48 @@
 # Configuration des URLs - Fédération Admin Front
 
+## 🎯 URLs de l'API
+
+- **Développement local** : `http://localhost:8000/api`
+- **Production** : `https://federation-backend.onrender.com/api`
+
 ## 🚀 Configuration pour le développement local et la production
 
 ### 📁 Fichiers de configuration
 
-#### 1. `.env.local` (Développement local)
-```bash
-# Configuration de l'API
-NEXT_PUBLIC_API_URL=http://localhost:8000/api
-NEXT_PUBLIC_PRODUCTION_API_URL=https://federation-admin-front.vercel.app/api
+ #### 1. `.env.local` (Développement local)
+ ```bash
+ # Configuration de l'API
+ NEXT_PUBLIC_API_URL=http://localhost:8000/api
+ NEXT_PUBLIC_PRODUCTION_API_URL=https://federation-backend.onrender.com/api
 
 # Configuration de l'environnement
 NODE_ENV=development
 ```
 
-#### 2. `.env.production` (Production)
-```bash
-# Configuration de l'API en production
-NEXT_PUBLIC_API_URL=https://federation-admin-front.vercel.app/api
-NEXT_PUBLIC_PRODUCTION_API_URL=https://federation-admin-front.vercel.app/api
+ #### 2. `.env.production` (Production)
+ ```bash
+ # Configuration de l'API en production
+ NEXT_PUBLIC_API_URL=https://federation-backend.onrender.com/api
+ NEXT_PUBLIC_PRODUCTION_API_URL=https://federation-backend.onrender.com/api
 
 # Configuration de l'environnement
 NODE_ENV=production
 ```
 
-#### 3. `vercel.json` (Configuration Vercel)
-```json
-{
-  "env": {
-    "NEXT_PUBLIC_API_URL": "https://federation-admin-front.vercel.app/api",
-    "NEXT_PUBLIC_PRODUCTION_API_URL": "https://federation-admin-front.vercel.app/api"
-  }
-}
-```
+ #### 3. `vercel.json` (Configuration Vercel)
+ ```json
+ {
+   "env": {
+     "NEXT_PUBLIC_API_URL": "https://federation-backend.onrender.com/api",
+     "NEXT_PUBLIC_PRODUCTION_API_URL": "https://federation-backend.onrender.com/api"
+   }
+ }
+ ```
 
 ### 🔧 Comment ça fonctionne
 
-1. **Développement local** : L'API pointe vers `http://localhost:8000/api`
-2. **Production** : L'API pointe vers `https://federation-admin-front.vercel.app/api`
+ 1. **Développement local** : L'API pointe vers `http://localhost:8000/api`
+ 2. **Production** : L'API pointe vers `https://federation-backend.onrender.com/api`
 3. **Fallback** : Si aucune variable d'environnement n'est définie, l'API utilise `http://localhost:8000/api`
 
 ### 🚀 Commandes de démarrage
@@ -68,7 +73,7 @@ yarn start
 Pour vérifier que la configuration fonctionne :
 
 1. **Développement** : Vérifiez que l'API pointe vers `localhost:8000`
-2. **Production** : Vérifiez que l'API pointe vers `federation-admin-front.vercel.app`
+ 2. **Production** : Vérifiez que l'API pointe vers `federation-backend.onrender.com`
 
 ### 🚨 Dépannage
 

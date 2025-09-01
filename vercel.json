@@ -1,18 +1,18 @@
 {
   "env": {
-    "NEXT_PUBLIC_API_URL": "https://federation-admin-front.vercel.app/api",
-    "NEXT_PUBLIC_PRODUCTION_API_URL": "https://federation-admin-front.vercel.app/api"
+    "NEXT_PUBLIC_API_URL": "https://federation-backend.onrender.com/api",
+    "NEXT_PUBLIC_PRODUCTION_API_URL": "https://federation-backend.onrender.com/api"
   },
   "build": {
     "env": {
-      "NEXT_PUBLIC_API_URL": "https://federation-admin-front.vercel.app/api",
-      "NEXT_PUBLIC_PRODUCTION_API_URL": "https://federation-admin-front.vercel.app/api"
+      "NEXT_PUBLIC_API_URL": "https://federation-backend.onrender.com/api",
+      "NEXT_PUBLIC_PRODUCTION_API_URL": "https://federation-backend.onrender.com/api"
     }
   },
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://federation-admin-front.vercel.app/api/$1"
+      "destination": "https://federation-backend.onrender.com/api/$1"
     }
   ],
   "headers": [
