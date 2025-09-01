@@ -1,12 +1,9 @@
 class AdminApiService {
   private getBaseURL() {
-    if (typeof window !== 'undefined') {
-      const hostname = window.location.hostname;
-      if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
-        return `http://192.168.1.101:8000/api`;
-      }
-    }
-    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+    // Utiliser la configuration centralisée
+    return process.env.NEXT_PUBLIC_API_URL || 
+           process.env.NEXT_PUBLIC_PRODUCTION_API_URL || 
+           'http://localhost:8000/api';
   }
 
   private get baseURL() {
