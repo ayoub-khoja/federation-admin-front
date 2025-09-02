@@ -4,10 +4,21 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useRouter } from 'next/navigation';
 
+interface Rapport {
+  id: number;
+  commissaire: string;
+  match: string;
+  date: string;
+  ligue: string;
+  statut: string;
+  observations: string;
+  note: number | null;
+}
+
 export default function RapportCommissairePage() {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
-  const [rapports, setRapports] = useState([]);
+  const [rapports, setRapports] = useState<Rapport[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     dateDebut: '',

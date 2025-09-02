@@ -4,10 +4,20 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useRouter } from 'next/navigation';
 
+interface Commissaire {
+  id: number;
+  nom: string;
+  telephone: string;
+  email: string;
+  ligue: string;
+  statut: string;
+  date_creation: string;
+}
+
 export default function CommissairePage() {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
-  const [commissaires, setCommissaires] = useState([]);
+  const [commissaires, setCommissaires] = useState<Commissaire[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
