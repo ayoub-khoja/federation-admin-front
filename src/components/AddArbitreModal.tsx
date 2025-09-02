@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { useLigues } from '../hooks/useLigues';
+import adminApi from '../services/adminApi';
 
 interface AddArbitreModalProps {
   isOpen: boolean;
@@ -51,6 +52,17 @@ export default function AddArbitreModal({
     password_confirm: ''
   });
   const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [phoneVerificationStatus, setPhoneVerificationStatus] = useState<{
+    isVerifying: boolean;
+    isVerified: boolean;
+    message: string;
+    type: 'success' | 'error' | 'info' | null;
+  }>({
+    isVerifying: false,
+    isVerified: false,
+    message: '',
+    type: null
+  });
 
   // Validation du mot de passe
   const passwordStrength = useMemo(() => {
@@ -90,9 +102,10 @@ export default function AddArbitreModal({
       formData.password_confirm.trim() !== '' &&
       formData.password === formData.password_confirm &&
       passwordStrength.score >= 3 && // Mot de passe au moins "Bon"
+      phoneVerificationStatus.isVerified && // Le numéro doit être vérifié
       Object.keys(errors).length === 0
     );
-  }, [formData, errors, passwordStrength.score]);
+  }, [formData, errors, passwordStrength.score, phoneVerificationStatus.isVerified]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -102,6 +115,7 @@ export default function AddArbitreModal({
     if (!formData.first_name.trim()) newErrors.first_name = 'Le prénom est requis';
     if (!formData.last_name.trim()) newErrors.last_name = 'Le nom est requis';
     if (!formData.phone_number.trim()) newErrors.phone_number = 'Le numéro de téléphone est requis';
+    if (!phoneVerificationStatus.isVerified) newErrors.phone_number = 'Le numéro de téléphone doit être vérifié et disponible';
     if (!formData.email.trim()) newErrors.email = 'L\'email est requis';
     if (!formData.address.trim()) newErrors.address = 'L\'adresse est requise';
     if (!formData.password.trim()) newErrors.password = 'Le mot de passe est requis';
@@ -134,6 +148,12 @@ export default function AddArbitreModal({
         password_confirm: ''
       });
       setErrors({});
+      setPhoneVerificationStatus({
+        isVerifying: false,
+        isVerified: false,
+        message: '',
+        type: null
+      });
       onClose();
     } catch (error) {
       // L'erreur sera gérée par le composant parent
@@ -146,6 +166,57 @@ export default function AddArbitreModal({
     // Effacer l'erreur du champ modifié
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
+
+  // Fonction pour vérifier le numéro de téléphone
+  const verifyPhoneNumber = async (phoneNumber: string) => {
+    if (!phoneNumber || phoneNumber.length < 8) {
+      setPhoneVerificationStatus({
+        isVerifying: false,
+        isVerified: false,
+        message: '',
+        type: null
+      });
+      return;
+    }
+
+    setPhoneVerificationStatus({
+      isVerifying: true,
+      isVerified: false,
+      message: 'Vérification en cours...',
+      type: 'info'
+    });
+
+    try {
+      const response = await adminApi.verifyPhoneNumber(phoneNumber);
+      
+      if (response.success && !response.exists) {
+        // Numéro disponible
+        setPhoneVerificationStatus({
+          isVerifying: false,
+          isVerified: true,
+          message: response.message || 'Numéro disponible',
+          type: 'success'
+        });
+      } else if (response.success && response.exists) {
+        // Numéro déjà utilisé
+        setPhoneVerificationStatus({
+          isVerifying: false,
+          isVerified: false,
+          message: response.message || 'Ce numéro est déjà utilisé',
+          type: 'error'
+        });
+      } else {
+        throw new Error(response.message || 'Erreur de vérification');
+      }
+    } catch (error) {
+      setPhoneVerificationStatus({
+        isVerifying: false,
+        isVerified: false,
+        message: error instanceof Error ? error.message : 'Erreur de vérification',
+        type: 'error'
+      });
     }
   };
 
@@ -165,6 +236,21 @@ export default function AddArbitreModal({
     
     const finalValue = formattedValue.length > 0 ? '+' + formattedValue : '';
     handleChange('phone_number', finalValue);
+    
+    // Réinitialiser le statut de vérification quand le numéro change
+    setPhoneVerificationStatus({
+      isVerifying: false,
+      isVerified: false,
+      message: '',
+      type: null
+    });
+  };
+
+  // Vérifier le numéro quand il est complet
+  const handlePhoneBlur = () => {
+    if (formData.phone_number && formData.phone_number.length >= 8) {
+      verifyPhoneNumber(formData.phone_number);
+    }
   };
 
   if (!isOpen) return null;
@@ -175,7 +261,15 @@ export default function AddArbitreModal({
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-white">👤 Ajouter un Arbitre</h2>
           <button
-            onClick={onClose}
+            onClick={() => {
+              setPhoneVerificationStatus({
+                isVerifying: false,
+                isVerified: false,
+                message: '',
+                type: null
+              });
+              onClose();
+            }}
             className="text-white/80 hover:text-white transition-colors text-2xl"
           >
             ✕
@@ -234,21 +328,55 @@ export default function AddArbitreModal({
               <label className="block text-sm font-medium text-white/90 mb-2">
                 Numéro de téléphone *
               </label>
-              <input
-                type="tel"
-                value={formData.phone_number}
-                onChange={(e) => handlePhoneChange(e.target.value)}
-                className={`w-full px-4 py-3 bg-white/20 backdrop-blur-sm border rounded-lg focus:outline-none transition-colors text-white placeholder-white/60 ${
-                  errors.phone_number ? 'border-red-500/50' : 'border-white/30 focus:border-white/50'
-                }`}
-                placeholder="+21612345678"
-                disabled={isLoading}
-              />
+              <div className="relative">
+                <input
+                  type="tel"
+                  value={formData.phone_number}
+                  onChange={(e) => handlePhoneChange(e.target.value)}
+                  onBlur={handlePhoneBlur}
+                  className={`w-full px-4 py-3 bg-white/20 backdrop-blur-sm border rounded-lg focus:outline-none transition-colors text-white placeholder-white/60 ${
+                    errors.phone_number ? 'border-red-500/50' : 
+                    phoneVerificationStatus.type === 'success' ? 'border-green-500/50' :
+                    phoneVerificationStatus.type === 'error' ? 'border-red-500/50' :
+                    'border-white/30 focus:border-white/50'
+                  }`}
+                  placeholder="+21612345678"
+                  disabled={isLoading}
+                />
+                {phoneVerificationStatus.isVerifying && (
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  </div>
+                )}
+                {phoneVerificationStatus.type === 'success' && !phoneVerificationStatus.isVerifying && (
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <span className="text-green-400 text-lg">✓</span>
+                  </div>
+                )}
+                {phoneVerificationStatus.type === 'error' && !phoneVerificationStatus.isVerifying && (
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <span className="text-red-400 text-lg">✗</span>
+                  </div>
+                )}
+              </div>
+              
+              {/* Messages de statut */}
+              {phoneVerificationStatus.message && (
+                <p className={`text-xs mt-1 ${
+                  phoneVerificationStatus.type === 'success' ? 'text-green-300' :
+                  phoneVerificationStatus.type === 'error' ? 'text-red-300' :
+                  'text-blue-300'
+                }`}>
+                  {phoneVerificationStatus.message}
+                </p>
+              )}
+              
               {errors.phone_number && (
                 <p className="text-red-300 text-xs mt-1">{errors.phone_number}</p>
               )}
+              
               <p className="text-white/60 text-xs mt-1">
-                Format: +216XXXXXXXX (numéro tunisien)
+                Format: +216XXXXXXXX (numéro tunisien) - Vérification automatique
               </p>
             </div>
 
@@ -459,7 +587,15 @@ export default function AddArbitreModal({
           <div className="flex justify-end space-x-4 pt-4 border-t border-white/20">
             <button
               type="button"
-              onClick={onClose}
+              onClick={() => {
+                setPhoneVerificationStatus({
+                  isVerifying: false,
+                  isVerified: false,
+                  message: '',
+                  type: null
+                });
+                onClose();
+              }}
               className="px-6 py-3 bg-white/20 backdrop-blur-sm text-white rounded-lg hover:bg-white/30 transition-all duration-300 border border-white/30"
             >
               Annuler

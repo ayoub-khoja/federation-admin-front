@@ -92,6 +92,16 @@ class AdminApiService {
     localStorage.removeItem('admin_refresh');
   }
 
+  // Vérification du numéro de téléphone
+  async verifyPhoneNumber(phoneNumber: string) {
+    return this.request('/accounts/verify-phone/', {
+      method: 'POST',
+      body: JSON.stringify({
+        phone_number: phoneNumber
+      }),
+    });
+  }
+
   // Gestion des Utilisateurs
   async getUsers(page = 1, search = '', type = 'all') {
     const params = new URLSearchParams({

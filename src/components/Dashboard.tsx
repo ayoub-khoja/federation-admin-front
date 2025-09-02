@@ -756,7 +756,7 @@ export default function Dashboard() {
       {/* Sidebar */}
       <Sidebar 
         activeItem={activeMenuItem}
-        onItemSelect={setActiveMenuItem}
+        onItemSelectAction={setActiveMenuItem}
         liguesCount={ligues.length}
         arbitresCount={arbitres.length}
         arbitresEnAttenteCount={arbitres.filter(a => !a.is_verified).length}

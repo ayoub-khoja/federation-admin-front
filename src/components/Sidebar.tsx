@@ -12,7 +12,7 @@ interface MenuItem {
 
 interface SidebarProps {
   activeItem: string;
-  onItemSelect: (itemId: string) => void;
+  onItemSelectAction: (itemId: string) => void;
   liguesCount?: number;
   arbitresCount?: number;
   arbitresEnAttenteCount?: number;
@@ -22,7 +22,7 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ 
   activeItem, 
-  onItemSelect, 
+  onItemSelectAction, 
   liguesCount = 0,
   arbitresCount = 0,
   arbitresEnAttenteCount = 0,
@@ -37,6 +37,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'designations', name: 'Désignations', icon: '⚽', count: arbitresEnAttenteCount },
     { id: 'ligues', name: 'Ligues', icon: '🏛️', count: liguesCount },
     { id: 'matchs', name: 'Matchs', icon: '⚽', count: matchesCount },
+    { id: 'commissaire', name: 'Commissaire', icon: '👨‍💼', count: 0 },
+    { id: 'rapport-commissaire', name: 'Rapport Commissaire', icon: '📋', count: 0 },
     { id: 'rapports', name: 'Rapports', icon: '📄', count: 0 },
     { id: 'statistiques', name: 'Statistiques', icon: '📊', count: 0 },
     { id: 'parametres', name: 'Paramètres', icon: '⚙️', count: 0 }
@@ -78,29 +80,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <ul className="space-y-1">
           {menuItems.map((item) => (
             <li key={item.id}>
-              <button
-                onClick={() => onItemSelect(item.id)}
-                className={`w-full flex items-center ${isCollapsed ? 'justify-center px-2' : 'justify-between px-3'} py-3 rounded-lg transition-all duration-200 group ${
-                  activeItem === item.id
-                    ? 'bg-white/20 text-white border border-white/30'
-                    : 'text-white/80 hover:bg-white/10 hover:text-white'
-                }`}
-              >
-                <div className="flex items-center space-x-3">
-                  <span className="text-lg group-hover:scale-110 transition-transform duration-200">
-                    {item.icon}
-                  </span>
-                  {!isCollapsed && (
-                    <span className="font-medium text-sm">{item.name}</span>
+              <div>
+                <button
+                  onClick={() => onItemSelectAction(item.id)}
+                  className={`w-full flex items-center ${isCollapsed ? 'justify-center px-2' : 'justify-between px-3'} py-3 rounded-lg transition-all duration-200 group ${
+                    activeItem === item.id
+                      ? 'bg-white/20 text-white border border-white/30'
+                      : 'text-white/80 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <span className="text-lg group-hover:scale-110 transition-transform duration-200">
+                      {item.icon}
+                    </span>
+                    {!isCollapsed && (
+                      <span className="font-medium text-sm">{item.name}</span>
+                    )}
+                  </div>
+                  
+                  {!isCollapsed && item.count !== undefined && item.count > 0 && (
+                    <span className="bg-white/20 text-white text-xs px-2 py-1 rounded-full">
+                      {item.count}
+                    </span>
                   )}
-                </div>
-                
-                {!isCollapsed && item.count && (
-                  <span className="bg-white/20 text-white text-xs px-2 py-1 rounded-full">
-                    {item.count}
-                  </span>
-                )}
-              </button>
+                </button>
+              </div>
             </li>
           ))}
         </ul>
