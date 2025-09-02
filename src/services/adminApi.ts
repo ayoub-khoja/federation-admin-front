@@ -1,9 +1,24 @@
 class AdminApiService {
   private getBaseURL() {
     // Utiliser la configuration centralisée
-    return process.env.NEXT_PUBLIC_API_URL || 
-           process.env.NEXT_PUBLIC_PRODUCTION_API_URL || 
-           'http://localhost:8000/api';
+    if (process.env.NODE_ENV === 'development') {
+      return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+    }
+    
+    if (process.env.NODE_ENV === 'production') {
+      return process.env.NEXT_PUBLIC_PRODUCTION_API_URL || 'https://federation-backend.onrender.com/api';
+    }
+    
+    // Fallback basé sur l'hostname
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname;
+      if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        return 'http://localhost:8000/api';
+      }
+      return 'https://federation-backend.onrender.com/api';
+    }
+    
+    return 'http://localhost:8000/api';
   }
 
   private get baseURL() {
