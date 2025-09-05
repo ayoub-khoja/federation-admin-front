@@ -291,7 +291,7 @@ export default function MatchsArbitresPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-800 to-red-900 p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-full mx-auto">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-2 flex items-center">
@@ -437,23 +437,23 @@ export default function MatchsArbitresPage() {
         {/* Tableau des matches */}
         <div className="bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[1400px]">
               <thead className="bg-white/20">
                 <tr>
-                  <th className="px-6 py-4 text-left text-white font-semibold">Équipes</th>
-                  <th className="px-6 py-4 text-left text-white font-semibold">Date & Heure</th>
-                  <th className="px-6 py-4 text-left text-white font-semibold">Stade</th>
-                  <th className="px-6 py-4 text-left text-white font-semibold">Arbitre Principal</th>
-                  <th className="px-6 py-4 text-left text-white font-semibold">Assistants</th>
-                  <th className="px-6 py-4 text-left text-white font-semibold">4ème Arbitre</th>
-                  <th className="px-6 py-4 text-left text-white font-semibold">Statut</th>
-                  <th className="px-6 py-4 text-left text-white font-semibold">Actions</th>
+                  <th className="px-4 py-4 text-left text-white font-semibold w-48">Équipes</th>
+                  <th className="px-4 py-4 text-left text-white font-semibold w-32">Date & Heure</th>
+                  <th className="px-4 py-4 text-left text-white font-semibold w-48">Stade</th>
+                  <th className="px-4 py-4 text-left text-white font-semibold w-40">Arbitre Principal</th>
+                  <th className="px-4 py-4 text-left text-white font-semibold w-40">Assistants</th>
+                  <th className="px-4 py-4 text-left text-white font-semibold w-32">4ème Arbitre</th>
+                  <th className="px-4 py-4 text-left text-white font-semibold w-24">Statut</th>
+                  <th className="px-4 py-4 text-left text-white font-semibold w-32">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/20">
                 {loading ? (
                   <tr>
-                    <td colSpan={8} className="px-6 py-8 text-center">
+                    <td colSpan={8} className="px-4 py-8 text-center">
                       <div className="flex items-center justify-center">
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mr-3"></div>
                         <span className="text-white/80">Chargement des matches...</span>
@@ -462,14 +462,14 @@ export default function MatchsArbitresPage() {
                   </tr>
                 ) : matches.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="px-6 py-8 text-center text-white/80">
+                    <td colSpan={8} className="px-4 py-8 text-center text-white/80">
                       Aucun match trouvé pour cette ligue
                     </td>
                   </tr>
                 ) : (
                   matches.map((match) => (
                     <tr key={match.id} className="hover:bg-white/10 transition-colors">
-                      <td className="px-6 py-4">
+                      <td className="px-4 py-4">
                         <div className="text-white font-semibold">
                           {match.equipe1} vs {match.equipe2}
                         </div>
@@ -479,34 +479,34 @@ export default function MatchsArbitresPage() {
                           </div>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-white/90">
-                        <div>{match.date}</div>
+                      <td className="px-4 py-4 text-white/90">
+                        <div className="font-medium">{match.date}</div>
                         <div className="text-sm text-white/70">{match.heure}</div>
                       </td>
-                      <td className="px-6 py-4 text-white/90">{match.stade}</td>
-                      <td className="px-6 py-4 text-white font-medium">{match.arbitre_principal}</td>
-                      <td className="px-6 py-4 text-white/90">
+                      <td className="px-4 py-4 text-white/90">{match.stade}</td>
+                      <td className="px-4 py-4 text-white font-medium">{match.arbitre_principal}</td>
+                      <td className="px-4 py-4 text-white/90">
                         <div className="text-sm">{match.arbitre_assistant1}</div>
                         <div className="text-sm">{match.arbitre_assistant2}</div>
                       </td>
-                      <td className="px-6 py-4 text-white/90">{match.quatrieme_arbitre}</td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 py-4 text-white/90">{match.quatrieme_arbitre}</td>
+                      <td className="px-4 py-4">
                         <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatutColor(match.statut)}`}>
                           {match.statut}
                         </span>
                       </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center space-x-2">
-                          <button className="text-blue-400 hover:text-blue-300 transition-colors">
+                      <td className="px-4 py-4">
+                        <div className="flex items-center justify-center space-x-1">
+                          <button className="text-blue-400 hover:text-blue-300 transition-colors p-1" title="Voir détails">
                             👁️
                           </button>
-                          <button className="text-green-400 hover:text-green-300 transition-colors">
+                          <button className="text-green-400 hover:text-green-300 transition-colors p-1" title="Modifier">
                             ✏️
                           </button>
-                          <button className="text-yellow-400 hover:text-yellow-300 transition-colors">
+                          <button className="text-yellow-400 hover:text-yellow-300 transition-colors p-1" title="Désigner arbitres">
                             👥
                           </button>
-                          <button className="text-red-400 hover:text-red-300 transition-colors">
+                          <button className="text-red-400 hover:text-red-300 transition-colors p-1" title="Supprimer">
                             🗑️
                           </button>
                         </div>

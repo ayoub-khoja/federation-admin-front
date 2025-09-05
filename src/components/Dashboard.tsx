@@ -19,6 +19,7 @@ import { newsService, News } from '../services/newsService';
 import PaiementArbitrePage from './PaiementArbitrePage';
 import MatchsArbitresPage from './MatchsArbitresPage';
 import ExcuseArbitresPage from '../app/excuse-arbitres/page';
+import DesignationsList from './DesignationsList';
 
 interface DashboardStats {
   total_arbitres: number;
@@ -361,6 +362,10 @@ export default function Dashboard() {
     return <ExcuseArbitresPage />;
   };
 
+  const renderDesignationsContent = () => {
+    return <DesignationsList designations={[]} onAddNew={() => {}} />;
+  };
+
   const renderContent = () => {
     switch (activeMenuItem) {
       case 'dashboard':
@@ -371,6 +376,8 @@ export default function Dashboard() {
         return renderArbitresContent();
       case 'arbitres-attente':
         return renderArbitresAttenteContent();
+      case 'designations':
+        return renderDesignationsContent();
       case 'ligues':
         return renderLiguesContent();
       case 'matchs':
