@@ -4,14 +4,14 @@ import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 
 export default function LoginForm() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login, isLoading, error } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    await login(username, password);
+    await login(email, password);
   };
 
   return (
@@ -34,17 +34,17 @@ export default function LoginForm() {
           )}
 
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
-              Numéro de téléphone
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              Adresse email
             </label>
             <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-colors"
-              placeholder="Entrez votre numéro de téléphone"
+              placeholder="Entrez votre adresse email"
             />
           </div>
 

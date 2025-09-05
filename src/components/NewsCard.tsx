@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { News } from '../services/newsService';
 import adminApi from '../services/adminApi';
 
@@ -93,9 +94,11 @@ export const NewsCard: React.FC<NewsCardProps> = ({
         <div className="mb-4">
           {news.media_type === 'image' && news.image && (
             <div className="relative">
-              <img
+              <Image
                 src={adminApi.getMediaURL(news.image)}
                 alt={title}
+                width={300}
+                height={200}
                 className="w-full h-48 object-cover rounded-lg border border-white/10"
                 onError={() => {
                   console.error('Erreur de chargement de l\'image:', news.image);

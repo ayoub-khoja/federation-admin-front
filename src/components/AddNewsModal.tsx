@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { useToast } from '../hooks/useToast';
 import { useLoading } from '../hooks/useLoading';
 import { ButtonLoader } from './ui';
@@ -214,9 +215,11 @@ export const AddNewsModal: React.FC<AddNewsModalProps> = ({ isOpen, onClose, onS
                     <span className="text-green-300 text-sm">✅ Prêt</span>
                   </div>
                   <div className="relative">
-                    <img
+                    <Image
                       src={previewImage}
                       alt="Aperçu de l'image"
+                      width={200}
+                      height={150}
                       className="w-full h-48 object-cover rounded-lg border border-white/20"
                     />
                     <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-sm rounded-lg px-2 py-1">

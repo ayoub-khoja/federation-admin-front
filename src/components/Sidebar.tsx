@@ -36,10 +36,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'arbitres', name: 'Arbitres', icon: '👥', count: arbitresCount },
     { id: 'designations', name: 'Désignations', icon: '⚽', count: arbitresEnAttenteCount },
     { id: 'ligues', name: 'Ligues', icon: '🏛️', count: liguesCount },
-    { id: 'matchs', name: 'Matchs', icon: '⚽', count: matchesCount },
+    { id: 'matchs', name: 'Matchs Abitrés', icon: '⚽', count: matchesCount },
     { id: 'commissaire', name: 'Commissaire', icon: '👨‍💼', count: 0 },
     { id: 'rapport-commissaire', name: 'Rapport Commissaire', icon: '📋', count: 0 },
-    { id: 'rapports', name: 'Rapports', icon: '📄', count: 0 },
+    { id: 'paiement-arbitre', name: 'Paiement Arbitre', icon: '💰', count: 0 },
+    { id: 'Excuse-Arbitres', name: 'Excuses Arbitres', icon: '📄', count: 0 },
     { id: 'statistiques', name: 'Statistiques', icon: '📊', count: 0 },
     { id: 'parametres', name: 'Paramètres', icon: '⚙️', count: 0 }
   ];

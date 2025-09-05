@@ -78,13 +78,13 @@ export const useAuth = () => {
     }
   };
 
-  const login = async (username: string, password: string) => {
+  const login = async (email: string, password: string) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      console.log('🔍 Tentative de connexion avec:', { username, password });
-      const response = await adminApi.login(username, password);
+      console.log('🔍 Tentative de connexion avec:', { email, password });
+      const response = await adminApi.login(email, password);
       console.log('📡 Réponse de l\'API:', response);
       
       // Les données utilisateur sont retournées dans la réponse de connexion

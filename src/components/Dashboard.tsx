@@ -16,6 +16,9 @@ import { NewsCard } from './NewsCard';
 import { ToastContainer } from './ui';
 import adminApi from '../services/adminApi';
 import { newsService, News } from '../services/newsService';
+import PaiementArbitrePage from './PaiementArbitrePage';
+import MatchsArbitresPage from './MatchsArbitresPage';
+import ExcuseArbitresPage from '../app/excuse-arbitres/page';
 
 interface DashboardStats {
   total_arbitres: number;
@@ -311,6 +314,53 @@ export default function Dashboard() {
     return grades[grade] || grade;
   };
 
+  // Fonctions de rendu pour les nouvelles pages
+  const renderCommissaireContent = () => (
+    <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-800 to-red-900 p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-white mb-2 flex items-center">
+            <span className="mr-3">👨‍💼</span>
+            Gestion des Commissaires
+          </h1>
+          <p className="text-white/80 text-lg">
+            Administration et suivi des commissaires de match
+          </p>
+        </div>
+        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20 text-center">
+          <p className="text-white/80 text-lg">Page Commissaire en cours de développement...</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderRapportCommissaireContent = () => (
+    <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-800 to-red-900 p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-white mb-2 flex items-center">
+            <span className="mr-3">📋</span>
+            Rapport Commissaire
+          </h1>
+          <p className="text-white/80 text-lg">
+            Consultation et gestion des rapports de commissaires
+          </p>
+        </div>
+        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20 text-center">
+          <p className="text-white/80 text-lg">Page Rapport Commissaire en cours de développement...</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderPaiementArbitreContent = () => {
+    return <PaiementArbitrePage />;
+  };
+
+  const renderExcuseArbitresContent = () => {
+    return <ExcuseArbitresPage />;
+  };
+
   const renderContent = () => {
     switch (activeMenuItem) {
       case 'dashboard':
@@ -323,8 +373,16 @@ export default function Dashboard() {
         return renderArbitresAttenteContent();
       case 'ligues':
         return renderLiguesContent();
-      case 'matches':
+      case 'matchs':
         return renderMatchesContent();
+      case 'commissaire':
+        return renderCommissaireContent();
+      case 'rapport-commissaire':
+        return renderRapportCommissaireContent();
+      case 'paiement-arbitre':
+        return renderPaiementArbitreContent();
+      case 'Excuse-Arbitres':
+        return renderExcuseArbitresContent();
       case 'rapports':
         return renderRapportsContent();
       case 'statistiques':
@@ -601,12 +659,9 @@ export default function Dashboard() {
     </div>
   );
 
-  const renderMatchesContent = () => (
-    <div className="bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg border border-white/30 p-6">
-      <h2 className="text-xl font-bold text-white mb-4">⚽ Gestion des Matchs</h2>
-      <p className="text-white/70">Planification et suivi des matchs...</p>
-    </div>
-  );
+  const renderMatchesContent = () => {
+    return <MatchsArbitresPage />;
+  };
 
   const renderRapportsContent = () => (
     <div className="bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg border border-white/30 p-6">

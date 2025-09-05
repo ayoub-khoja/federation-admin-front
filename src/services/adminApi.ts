@@ -68,12 +68,36 @@ class AdminApiService {
     return this.request(endpoint, options);
   }
 
-  // Authentification Admin
-  async login(username: string, password: string) {
+
+  // Authentification Admin par email
+  async login(email: string, password: string) {
+    const response = await this.request('/accounts/admins/email-login/', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: email,
+        password: password
+      }),
+    });
+
+    if (response.access) {
+      localStorage.setItem('admin_token', response.access);
+      if (response.refresh) {
+        localStorage.setItem('admin_refresh', response.refresh);
+      }
+      if (response.user) {
+        localStorage.setItem('admin_user', JSON.stringify(response.user));
+      }
+    }
+
+    return response;
+  }
+
+  // Authentification Admin par téléphone (conservé pour compatibilité)
+  async loginByPhone(phoneNumber: string, password: string) {
     const response = await this.request('/accounts/admins/login/', {
       method: 'POST',
       body: JSON.stringify({
-        phone_number: username,
+        phone_number: phoneNumber,
         password: password
       }),
     });
@@ -136,7 +160,7 @@ class AdminApiService {
   }
 
   async deleteArbitre(id: string) {
-    return this.request(`/accounts/arbitres/${id}/delete/`, {
+    return this.request(`/accounts/admin/arbitres/${id}/delete/`, {
       method: 'DELETE',
     });
   }
@@ -206,6 +230,36 @@ class AdminApiService {
     return this.request(`/matches/?${params}`);
   }
 
+  // Récupérer tous les matches de type "Ligue 1"
+  async getMatchesLigue1() {
+    return this.request('/matches/ligue1/');
+  }
+
+  async getMatchesLigue2() {
+    return this.request('/matches/ligue2/');
+  }
+
+  async getMatchesC1() {
+    return this.request('/matches/c1/');
+  }
+
+  async getMatchesC2() {
+    return this.request('/matches/c2/');
+  }
+
+  async getMatchesJeunes() {
+    return this.request('/matches/jeunes/');
+  }
+
+  async getMatchesCoupeTunisie() {
+    return this.request('/matches/coupe-tunisie/');
+  }
+
+  // Récupérer toutes les excuses d'arbitres
+  async getExcusesArbitres() {
+    return this.request('/matches/excuses/');
+  }
+
   async getMatch(id: string) {
     return this.request(`/matches/${id}/`);
   }
@@ -226,6 +280,19 @@ class AdminApiService {
   // Statistiques
   async getStats() {
     return this.request('/accounts/stats/');
+  }
+
+  // Excuses par période temporelle
+  async getExcusesPassees(date: string) {
+    return this.request(`/matches/excuses/passees/?date=${date}`);
+  }
+
+  async getExcusesEnCours(date: string) {
+    return this.request(`/matches/excuses/en-cours/?date=${date}`);
+  }
+
+  async getExcusesAVenir(date: string) {
+    return this.request(`/matches/excuses/a-venir/?date=${date}`);
   }
 }
 
